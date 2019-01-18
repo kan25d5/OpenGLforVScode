@@ -1,7 +1,7 @@
 # Visual Studio Code でOpenGLプログラミング
 ## C/C++環境構築
 ### VScodeのC環境構築
-拡張機能「`C/C++ for Visual Studio Code`」を導入する。その後、エディタを再起動する。拡張機能「`C++ Intellisense`」を導入する。その後、エディタを再起動する。VScodeのC/C++環境の導入が完了した。
+ここでは、主に補完機能などを提供する拡張機能「`C/C++ for Visual Studio Code`」、自動体裁／静的コード解析機能を提供するclangをVSScode上で利用する拡張機能「`C++ Intellisense`」を導入する。その後、エディタを再起動する。VScodeのC/C++環境の導入が完了した。
 
 ### Cライブラリ情報の追加
 導入したC/C++環境のセッティングを行う。cプログラムをvscode上で読み込み、標準ヘッダーファイルをインクルードを記述する。すると緑色の波線が表示される（されない場合は、一度ソースファイルを保存する）。画像では、意図的に存在しないヘッダーファイルをインクルードしているが、実際は標準ヘッダーファイルでも波線が表示される。
@@ -24,7 +24,23 @@ echo %INCLUDE%
 C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\cppwinrt
 ```
 
-となった。このヘッダーファイルへのパスを。`.vscode/c_cpp_properties.json`の`"includePath"`プロパティに追加する。
+となった。このヘッダーファイルへのパスを`.vscode/c_cpp_properties.json`の`"includePath"`プロパティに追加する。筆者環境では
+
+```
+    "includePath": [
+        "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/ATLMFC/include",
+        "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include",
+        "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.6.1/include/um",
+        "C:/Program Files (x86)/Windows Kits/10/include/10.0.17134.0/ucrt",
+        "C:/Program Files (x86)/Windows Kits/10/include/10.0.17134.0/shared",
+        "C:/Program Files (x86)/Windows Kits/10/include/10.0.17134.0/um",
+        "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.17134.0/um",
+        "C:/Program Files (x86)/Windows Kits/10/include/10.0.17134.0/winrt",
+        "C:/Program Files (x86)/Windows Kits/10/include/10.0.17134.0/cppwinrt"
+    ],
+```
+
+となった。これで、標準ライブラリの補完機能が追加された。
 
 
 ### clang導入
@@ -39,7 +55,7 @@ https://www.msys2.org/
 
 Clangを導入したら、`C:\msys64`下にある`clang-format.exe`を探す、筆者の環境では`C:/msys64/usr/bin/clang-format.exe`にあったが、`C:/msys64/mingw64/bin/clang-format.exe`にある場合もある。
 
-### clang_format_pathの設定
+#### clang_format_pathの設定
 VScode上でClangを利用する`C++ IntelliSense`の設定を行う。Ctrl + ｀で設定画面を開き、右上から「setting.jsonを開く」を選択。ユーザー設定に、`clang_format_path`のプロパティを追加。プロパティは`clang-format.exe`への絶対パスを記述する。筆者の環境では
 
 ```
@@ -49,7 +65,7 @@ VScode上でClangを利用する`C++ IntelliSense`の設定を行う。Ctrl + �
 となった。これで体裁を自動的に整える機能が追加できた。
 
 
-### 設定後も体裁を自動的に整わない場合
+#### 設定後も体裁を自動的に整わない場合
 Vscode上の設定で、体裁設定ができていないかもしれない。setting.jsonのユーザー設定に以下を追加する。
 
 ```
@@ -57,3 +73,13 @@ Vscode上の設定で、体裁設定ができていないかもしれない。se
     "editor.formatOnPaste": true,   // 貼り付けた文字列の体裁を整えるか
     "editor.formatOnSave": false,   // 保存時に体裁を整えるか
 ```
+
+### OpenCLライブラリの補完機能
+執筆中。Visual Studio 2015環境の方は情報工学基礎ユニットⅡ宮崎先生の資料、2017の方は「Visual Studio 2017でOpenGLを動かせるようにする - Qiita」（https://qiita.com/SonoT/items/4387ec1c8d7af8979b35 ）などが参考になる。glut.hを追加したディレクトリのパスを`.vscode/c_cpp_properties.json`の`"includePath"`プロパティに追加することで補完可能である。
+
+Qiitaの該当記事では、glut.hを追加するディレクトリのパスを
+```
+ 	C:¥Program File(x86)¥Windows Kits¥10¥Include¥10.X.XXXXX.X¥um¥gl
+```
+
+と表現しているが、10.X.XXXXX.Xに該当するフォルダが複数存在する場合がある（筆者環境ではそうだった）。`echo %INCLUDE%`で確認したディレクトリに追加すること。
