@@ -4,11 +4,15 @@
 拡張機能「`C/C++ for Visual Studio Code`」を導入する。その後、エディタを再起動する。拡張機能「`C++ Intellisense`」を導入する。その後、エディタを再起動する。VScodeのC/C++環境の導入が完了した。
 
 ### Cライブラリ情報の追加
-導入したC/C++環境のセッティングを行う。cプログラムをvscode上で読み込み、ヘッダーファイルをインクルードする。すると緑色の波線が表示される（されない場合は、一度ソースファイルを保存する）ので、`#include`の`#`あたりをポインタにのせ、電球マークをクリック。`Edit Includ Path setting`を選択する。
+導入したC/C++環境のセッティングを行う。cプログラムをvscode上で読み込み、標準ヘッダーファイルをインクルードを記述する。すると緑色の波線が表示される（されない場合は、一度ソースファイルを保存する）。画像では、意図的に存在しないヘッダーファイルをインクルードしているが、実際は標準ヘッダーファイルでも波線が表示される。
+
+<img src="img/1.png">
+
+`#include`の`#`あたりをポインタにのせ、電球マークをクリック。`Edit Includ Path setting`を選択する。
 
 すると、`.vscode/c_cpp_properties.json`が生成される。この`"includePath"`プロパティに、インクルードヘッダーファイルのパスを絶対パスで記述する。
 
-Visual C++におけるヘッダーファイルのパスは、開発者ツールにて
+Visual C++におけるヘッダーファイルのパスは、Visual Studioの開発者コマンド プロンプトにて
 
 ```
 echo %INCLUDE%
@@ -17,18 +21,10 @@ echo %INCLUDE%
 を実行することで確認できる。出力されたパスは、`;`で区切られていて、改行されていないので注意。筆者の環境（Visual Studio 2015）では、
 
 ```
-            "includePath": [
-                "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/INCLUDE",
-                "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/ATLMFC/INCLUDE",
-                "C:/Program Files (x86)/Windows Kits/10/include/10.0.16299.0/ucrt",
-                "C:/Program Files (x86)/Windows Kits/NETFXSDK/4.6.1/include/um",
-                "C:/Program Files (x86)/Windows Kits/10/include/10.0.16299.0/shared",
-                "C:/Program Files (x86)/Windows Kits/10/include/10.0.16299.0/um",
-                "C:/Program Files (x86)/Windows Kits/10/include/10.0.16299.0/winrt"
-            ],
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\cppwinrt
 ```
 
-となった。これで補完機能が追加できた。
+となった。このヘッダーファイルへのパスを。`.vscode/c_cpp_properties.json`の`"includePath"`プロパティに追加する。
 
 
 ### clang導入
